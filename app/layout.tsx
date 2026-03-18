@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthControls } from "@/components/auth-controls";
 import { AuthProvider } from "@/components/auth-provider";
@@ -7,6 +7,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "CET4 Vocab Web",
   description: "A simple vocabulary review app built with Next.js.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -23,12 +27,8 @@ export default function RootLayout({
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-sm uppercase tracking-[0.25em] text-brand-500">
-                      CET-4 Vocabulary
-                    </p>
-                    <h1 className="mt-2 text-3xl font-semibold text-brand-900">
-                      cte4-vocab-web
-                    </h1>
+                    <p className="text-sm uppercase tracking-[0.25em] text-brand-500">CET-4 Vocabulary</p>
+                    <h1 className="mt-2 text-3xl font-semibold text-brand-900">cte4-vocab-web</h1>
                   </div>
                   <AuthControls />
                 </div>
@@ -37,22 +37,13 @@ export default function RootLayout({
                   <Link className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700" href="/">
                     首页
                   </Link>
-                  <Link
-                    className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700"
-                    href="/review"
-                  >
+                  <Link className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700" href="/review">
                     复习
                   </Link>
-                  <Link
-                    className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700"
-                    href="/login"
-                  >
+                  <Link className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700" href="/login">
                     账号
                   </Link>
-                  <Link
-                    className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700"
-                    href="/api/words"
-                  >
+                  <Link className="rounded-full px-4 py-2 hover:bg-brand-50 hover:text-brand-700" href="/api/words">
                     API
                   </Link>
                 </nav>
@@ -65,3 +56,4 @@ export default function RootLayout({
     </html>
   );
 }
+
