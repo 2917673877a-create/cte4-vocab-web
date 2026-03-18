@@ -24,35 +24,48 @@ export function ReviewSession({ words }: ReviewSessionProps) {
     let mounted = true;
 
     async function prepareQueue() {
-      setIsReady(false);
-      const now = new Date();
-      const currentRecords = await loadLearningRecords(user?.uid);
-      const dueWords = words.filter((word) => {
-        const record = currentRecords[word.id];
-        if (!record) {
-          return true;
+      try {
+        setIsReady(false);
+        const now = new Date();
+        const currentRecords = await loadLearningRecords(user?.uid);
+        const dueWords = words.filter((word) => {
+          const record = currentRecords[word.id];
+          if (!record) {
+            return true;
+          }
+
+          return new Date(record.nextReviewDate) <= now;
+        });
+
+        dueWords.sort((left, right) => {
+          const leftRecord = currentRecords[left.id];
+          const rightRecord = currentRecords[right.id];
+          const leftTime = leftRecord ? new Date(leftRecord.nextReviewDate).getTime() : 0;
+          const rightTime = rightRecord ? new Date(rightRecord.nextReviewDate).getTime() : 0;
+          return leftTime - rightTime;
+        });
+
+        if (!mounted) {
+          return;
         }
 
-        return new Date(record.nextReviewDate) <= now;
-      });
-
-      dueWords.sort((left, right) => {
-        const leftRecord = currentRecords[left.id];
-        const rightRecord = currentRecords[right.id];
-        const leftTime = leftRecord ? new Date(leftRecord.nextReviewDate).getTime() : 0;
-        const rightTime = rightRecord ? new Date(rightRecord.nextReviewDate).getTime() : 0;
-        return leftTime - rightTime;
-      });
-
-      if (!mounted) {
-        return;
+        setRecords(currentRecords);
+        setQueue(dueWords);
+        setCompletedCount(0);
+        setStatus("");
+      } catch (error) {
+        if (mounted) {
+          setRecords({});
+          setQueue([]);
+          setCompletedCount(0);
+          setStatus(error instanceof Error ? error.message : "加载复习列表失败，请稍后重试。");
+        }
+        console.error("Failed to prepare review queue:", error);
+      } finally {
+        if (mounted) {
+          setIsReady(true);
+        }
       }
-
-      setRecords(currentRecords);
-      setQueue(dueWords);
-      setCompletedCount(0);
-      setStatus("");
-      setIsReady(true);
     }
 
     void prepareQueue();
@@ -119,7 +132,7 @@ export function ReviewSession({ words }: ReviewSessionProps) {
             {status || "当前没有到期的单词，可以先去详情页点击“记住了 / 没记住”积累学习记录。"}
           </p>
           <p className="mt-2 text-sm text-stone-500">
-            {user ? `当前账号：${user.email}` : "当前为游客模式，登录后会自动同步学习记录。"}
+            {user ? `当前账号：${user.username || user.email || user.uid}` : "当前为游客模式，登录后会自动同步学习记录。"}
           </p>
         </div>
         <Link
@@ -142,7 +155,7 @@ export function ReviewSession({ words }: ReviewSessionProps) {
             按顺序逐个复习，点击“记住”或“忘记”后会自动切换到下一个。
           </p>
           <p className="mt-2 text-sm text-stone-500">
-            {user ? `当前账号：${user.email}` : "当前为游客模式，登录后会自动同步学习记录。"}
+            {user ? `当前账号：${user.username || user.email || user.uid}` : "当前为游客模式，登录后会自动同步学习记录。"}
           </p>
         </div>
         <div className="rounded-2xl bg-stone-50 px-4 py-3 text-sm text-stone-600">

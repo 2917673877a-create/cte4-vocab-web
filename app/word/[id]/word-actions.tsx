@@ -21,12 +21,23 @@ export function WordActions({ word }: WordActionsProps) {
     let mounted = true;
 
     async function loadRecord() {
-      setLoadingRecord(true);
-      const nextRecord = await getLearningRecord(word.id, user?.uid);
+      try {
+        setLoadingRecord(true);
+        const nextRecord = await getLearningRecord(word.id, user?.uid);
 
-      if (mounted) {
-        setRecord(nextRecord);
-        setLoadingRecord(false);
+        if (mounted) {
+          setRecord(nextRecord);
+        }
+      } catch (error) {
+        if (mounted) {
+          setRecord(null);
+          setStatus(error instanceof Error ? error.message : "加载学习记录失败，请稍后重试。");
+        }
+        console.error("Failed to load learning record:", error);
+      } finally {
+        if (mounted) {
+          setLoadingRecord(false);
+        }
       }
     }
 
@@ -77,7 +88,7 @@ export function WordActions({ word }: WordActionsProps) {
         学习操作
       </h3>
       <p className="mt-2 text-sm text-stone-500">
-        {user ? `当前账号：${user.email}` : "当前为游客模式，登录后会自动同步学习记录。"}
+        {user ? `当前账号：${user.username || user.email || user.uid}` : "当前为游客模式，登录后会自动同步学习记录。"}
       </p>
 
       <div className="mt-4 flex flex-wrap gap-3">

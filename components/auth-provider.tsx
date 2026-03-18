@@ -28,20 +28,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let mounted = true;
 
     const syncUser = async () => {
-      const nextUser = await getAuthUser();
+      try {
+        const nextUser = await getAuthUser();
 
-      if (!mounted) {
-        return;
-      }
+        if (!mounted) {
+          return;
+        }
 
-      setUser(nextUser);
+        setUser(nextUser);
 
-      if (nextUser?.uid) {
-        await syncLocalRecordsToCloud(nextUser.uid);
-      }
-
-      if (mounted) {
-        setLoading(false);
+        if (nextUser?.uid) {
+          await syncLocalRecordsToCloud(nextUser.uid);
+        }
+      } catch (error) {
+        if (mounted) {
+          setUser(null);
+        }
+        console.error("CloudBase auth sync failed:", error);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 

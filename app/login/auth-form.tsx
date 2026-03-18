@@ -28,8 +28,7 @@ export function AuthForm() {
       if (mode === "login") {
         await login(username, password);
         setMessage("登录成功，正在跳转...");
-        router.push("/");
-        router.refresh();
+        window.location.assign("/");
       } else {
         await register(username, password);
       }
