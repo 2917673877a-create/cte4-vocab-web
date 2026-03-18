@@ -1,16 +1,22 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWordById } from "@/lib/words";
 import { WordActionsShell } from "./word-actions-shell";
 
-type WordDetailPageProps = {
-  params: Promise<{
-    id: string;
+type WordPageProps = {
+  searchParams?: Promise<{
+    id?: string;
   }>;
 };
 
-export default async function WordDetailPage({ params }: WordDetailPageProps) {
-  const { id } = await params;
+export default async function WordPage({ searchParams }: WordPageProps) {
+  const params = searchParams ? await searchParams : {};
+  const id = typeof params.id === "string" ? params.id : "";
+
+  if (!id) {
+    notFound();
+  }
+
   const word = getWordById(id);
 
   if (!word) {

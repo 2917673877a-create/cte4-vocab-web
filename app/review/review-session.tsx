@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -151,9 +151,7 @@ export function ReviewSession({ words }: ReviewSessionProps) {
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-brand-500">Today's Review</p>
           <h3 className="mt-3 text-3xl font-semibold text-brand-900">今天需要复习的单词</h3>
-          <p className="mt-3 text-stone-600">
-            按顺序逐个复习，点击“记住”或“忘记”后会自动切换到下一个。
-          </p>
+          <p className="mt-3 text-stone-600">按顺序逐个复习，点击“记住”或“忘记”后会自动切换到下一个。</p>
           <p className="mt-2 text-sm text-stone-500">
             {user ? `当前账号：${user.username || user.email || user.uid}` : "当前为游客模式，登录后会自动同步学习记录。"}
           </p>
@@ -221,7 +219,7 @@ export function ReviewSession({ words }: ReviewSessionProps) {
         </button>
         <Link
           className="rounded-full border border-stone-300 px-6 py-3 text-sm font-medium text-stone-700 hover:border-brand-500 hover:text-brand-700"
-          href={`/word/${currentWord.id}`}
+          href={`/word?id=${encodeURIComponent(currentWord.id)}`}
         >
           查看详情
         </Link>

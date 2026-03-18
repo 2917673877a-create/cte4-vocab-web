@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
@@ -84,9 +84,7 @@ export function WordActions({ word }: WordActionsProps) {
 
   return (
     <div className="mt-8 rounded-3xl border border-stone-200 bg-stone-50 p-5">
-      <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-500">
-        学习操作
-      </h3>
+      <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-stone-500">学习操作</h3>
       <p className="mt-2 text-sm text-stone-500">
         {user ? `当前账号：${user.username || user.email || user.uid}` : "当前为游客模式，登录后会自动同步学习记录。"}
       </p>
