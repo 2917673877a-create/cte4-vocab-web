@@ -1,17 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { Component, ReactNode } from "react";
 import { Word } from "@/lib/types";
-
-const LazyWordActions = dynamic(() => import("./word-actions").then((mod) => mod.WordActions), {
-  ssr: false,
-  loading: () => (
-    <div className="mt-8 rounded-3xl border border-stone-200 bg-stone-50 p-5 text-sm text-stone-500">
-      正在加载学习操作...
-    </div>
-  ),
-});
+import { WordActions } from "./word-actions";
 
 type WordActionsShellProps = {
   word: Word;
@@ -56,7 +47,7 @@ class WordActionsErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
 export function WordActionsShell({ word }: WordActionsShellProps) {
   return (
     <WordActionsErrorBoundary>
-      <LazyWordActions word={word} />
+      <WordActions word={word} />
     </WordActionsErrorBoundary>
   );
 }
